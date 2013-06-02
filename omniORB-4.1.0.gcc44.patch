@@ -1,0 +1,81 @@
+diff -r -u omniORB-4.1.0/src/appl/utils/catior/catior.cc omniORB-4.1.0-patch/src/appl/utils/catior/catior.cc
+--- omniORB-4.1.0/src/appl/utils/catior/catior.cc	2005-05-22 08:39:44.000000000 -0400
++++ omniORB-4.1.0-patch/src/appl/utils/catior/catior.cc	2012-05-02 12:44:47.000000000 -0400
+@@ -360,7 +360,7 @@
+   int hexflag = 0;
+   int omniflag = 0;
+ 
+-  while((c = getopt(argc,argv,"xo")) != EOF) {
++  while((c = getopt(argc,argv,"xo")) != -1) {
+     switch(c) {
+     case 'x':
+       hexflag = 1;
+diff -r -u omniORB-4.1.0/src/appl/utils/convertior/convertior.cc omniORB-4.1.0-patch/src/appl/utils/convertior/convertior.cc
+--- omniORB-4.1.0/src/appl/utils/convertior/convertior.cc	2005-05-22 08:39:43.000000000 -0400
++++ omniORB-4.1.0-patch/src/appl/utils/convertior/convertior.cc	2012-05-02 12:44:08.000000000 -0400
+@@ -150,7 +150,7 @@
+ 
+   int c;
+ 
+-  while((c = getopt(argc,argv,"x")) != EOF)
++  while((c = getopt(argc,argv,"x")) != -1)
+     {
+       switch(c)
+ 	{
+diff -r -u omniORB-4.1.0/src/lib/omniORB/orbcore/ssl/sslContext.cc omniORB-4.1.0-patch/src/lib/omniORB/orbcore/ssl/sslContext.cc
+--- omniORB-4.1.0/src/lib/omniORB/orbcore/ssl/sslContext.cc	2005-09-05 13:12:20.000000000 -0400
++++ omniORB-4.1.0-patch/src/lib/omniORB/orbcore/ssl/sslContext.cc	2012-05-02 13:27:56.000000000 -0400
+@@ -168,7 +168,7 @@
+ /////////////////////////////////////////////////////////////////////////
+ SSL_METHOD*
+ sslContext::set_method() {
+-  return SSLv23_method();
++  return OMNI_CONST_CAST(SSL_METHOD*, SSLv23_method());
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////
+diff -r -u omniORB-4.1.0/src/tool/omkdepend/def.h omniORB-4.1.0-patch/src/tool/omkdepend/def.h
+--- omniORB-4.1.0/src/tool/omkdepend/def.h	2005-05-10 18:07:32.000000000 -0400
++++ omniORB-4.1.0-patch/src/tool/omkdepend/def.h	2012-05-02 12:43:14.000000000 -0400
+@@ -128,7 +128,7 @@
+ 
+ char			*copy();
+ char			*base_name();
+-char			*getline();
++char			*get_line();
+ struct symtab		*slookup();
+ struct symtab		*isdefined();
+ struct symtab		*fdefined();
+diff -r -u omniORB-4.1.0/src/tool/omkdepend/main.c omniORB-4.1.0-patch/src/tool/omkdepend/main.c
+--- omniORB-4.1.0/src/tool/omkdepend/main.c	2003-03-23 16:01:49.000000000 -0500
++++ omniORB-4.1.0-patch/src/tool/omkdepend/main.c	2012-05-02 12:42:46.000000000 -0400
+@@ -469,7 +469,7 @@
+  * Get the next line.  We only return lines beginning with '#' since that
+  * is all this program is ever interested in.
+  */
+-char *getline(filep)
++char *get_line(filep)
+ 	register struct filepointer	*filep;
+ {
+ 	register char	*p,	/* walking pointer */
+diff -r -u omniORB-4.1.0/src/tool/omkdepend/parse.c omniORB-4.1.0-patch/src/tool/omkdepend/parse.c
+--- omniORB-4.1.0/src/tool/omkdepend/parse.c	2003-03-23 16:01:49.000000000 -0500
++++ omniORB-4.1.0-patch/src/tool/omkdepend/parse.c	2012-05-02 12:42:17.000000000 -0400
+@@ -41,7 +41,7 @@
+ 	register int	type;
+ 	boolean recfailOK;
+ 
+-	while (line = getline(filep)) {
++	while (line = get_line(filep)) {
+ 		switch(type = deftype(line, filep, file_red, file, TRUE)) {
+ 		case IF:
+ 		doif:
+@@ -166,7 +166,7 @@
+ 	register char	*line;
+ 	register int	type;
+ 
+-	while (line = getline(filep)) {
++	while (line = get_line(filep)) {
+ 		switch(type = deftype(line, filep, file_red, file, FALSE)) {
+ 		case IF:
+ 		case IFFALSE:

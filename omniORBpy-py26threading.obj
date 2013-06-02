@@ -1,0 +1,15 @@
+diff -ur omniORBpy-3-20090616/python/omniORB/__init__.py omniORBpy-3-20090616-patched/python/omniORB/__init__.py
+--- omniORBpy-3-20090616/python/omniORB/__init__.py	2009-05-07 02:50:23.000000000 +1000
++++ omniORBpy-3-20090616-patched/python/omniORB/__init__.py	2009-06-17 11:41:57.907194666 +1000
+@@ -998,7 +998,10 @@
+     def __init__(self):
+         id = _thr_id()
+         _thr_init(self, name="omniORB-%d" % id)
+-        self._Thread__started = 1
++        if hasattr(self._Thread__started, 'set'):
++            self._Thread__started.set()
++        else:
++            self._Thread__started = 1
+         self.id = id
+         _thr_acq()
+         if _thr_act.has_key(id):
